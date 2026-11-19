@@ -1,0 +1,7 @@
+Package: fury-cli
+Source: fury-cli
+Version: 1.0.0
+Architecture: amd64
+Maintainer: Freetime Maker <FreetimeMaker@proton.me>
+Depends: libc6 (>= 2.34), ca-certificates
+Description: Command-line interface for Gemfury

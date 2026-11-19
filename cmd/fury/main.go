@@ -15,7 +15,7 @@ import (
 
 // Populated by GoReleaser
 var (
-	Version = "dev"
+	Version = "1.0.0"
 )
 
 func main() {

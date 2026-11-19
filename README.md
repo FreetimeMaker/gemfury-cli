@@ -1,78 +1,96 @@
 Gemfury CLI
 ===========
 
-[![Gem Version](https://badge.fury.io/go/github.com%2Fgemfury%2Fcli.svg)](https://badge.fury.io/go/github.com%2Fgemfury%2Fcli)
-[![Tests](https://github.com/gemfury/cli/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/gemfury/cli/actions/workflows/tests.yml)
+[![Tests](https://github.com/FreetimeMaker/gemfury-cli/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/FreetimeMaker/gemfury-cli/actions/workflows/tests.yml)
 
-This is the Gemfury CLI used to manage your Gemfury packages from the command line.  If you're
-familiar with the service and want to jump straight into command line action, please proceed to
-the [CLI documentation](https://gemfury.com/guide/cli/).
+This repository is a fork of the [upstream Gemfury CLI](https://github.com/gemfury/cli),
+a Go command-line tool for managing Gemfury packages. For command usage, see the
+[Gemfury CLI documentation](https://gemfury.com/guide/cli/).
 
 Gemfury is your personal cloud for your private and custom RubyGems, Python packages, and NPM
-modules.  Once you upload your packages and enable Gemfury as a source, you can securely deploy
+modules. Once you upload your packages and enable Gemfury as a source, you can securely deploy
 any package to any host. It's simple, reliable, and hassle-free.
 
 ## Installation
 
-### Homebrew (macOS and Linux)
+This fork no longer includes the upstream GoReleaser workflow. The package
+repositories and binary downloads below distribute the **upstream CLI**, not
+builds of this fork.
 
-```
-brew install --cask gemfury/tap/fury-cli
-```
+### Building the fork
 
-Homebrew 6 and later does not trust third-party taps by default, so use the
-fully qualified name as above, or run `brew trust gemfury/tap` once. The
-legacy Ruby `gemfury` formula also installs a `fury` binary; uninstall it
-first.
+The local build target is `make fury`, which uses Go (the module requires Go
+1.27.0) and writes `./fury` for the current platform. The module path in
+`go.mod` is already `github.com/FreetimeMaker/gemfury-cli`, but Go source files
+still import `github.com/gemfury/cli`. Those imports need to be aligned with the
+module path before the fork can build.
+
+### RPM packaging
+
+`fury-cli.spec` packages a prebuilt `fury` binary for Linux x86_64 and installs
+it as `/usr/bin/fury` on standard RPM systems. The spec does not build the
+binary itself.
 
 ### Debian and Ubuntu (apt)
 
-```
-echo "deb [trusted=yes] https://apt.fury.io/cli/ /" | sudo tee /etc/apt/sources.list.d/fury-cli.list
-sudo apt-get update && sudo apt-get install fury-cli
-```
+1. Download the .deb files or use the APT Repository:
 
-### Alpine (apk)
-
-```
-echo "https://alpine.fury.io/cli/" >> /etc/apk/repositories
-curl -fsSL https://alpine.fury.io/cli/KEY.rsa.pub > /etc/apk/keys/KEY.rsa.pub
-apk add fury-cli
+```bash
+sudo nano /etc/apt/sources.list.d/Freetime-Repo.list
 ```
 
-### Arch Linux (pacman)
+then add:
 
-Add the repository to `/etc/pacman.conf`, then install:
-
-```
-[fury]
-SigLevel = Optional
-Server = https://pacman.fury.io/cli/$arch
+```bash
+deb [trusted=yes arch=amd64] https://https://repo.free-time.me/apt/
 ```
 
-```
-pacman -Sy fury-cli
+then run:
+
+```bash
+sudo apt update
+sudo apt install fury-cli
 ```
 
-### Binaries
+### Fedora and CentOS (dnf)
 
-Every release on the [releases page](https://github.com/gemfury/cli/releases)
-ships archives for macOS (universal), Linux (x86_64 and ARM64), and Windows
-(x86_64 and ARM64), with a checksums file to verify them. Unpack the archive
-and put `fury` somewhere on your `PATH`.
+1. Download the .rpm file or use the YUM Repository:
+
+```bash
+sudo nano /etc/yum.repos.d/Freetime-Repo.repo
+```
+
+then add:
+
+```bash
+[Freetime-Repo]
+name=Freetime Repo
+baseurl=https://repo.free-time.me/yum/
+enabled=1
+gpgcheck=0
+```
+
+then run:
+
+```bash
+sudo dnf install fury-cli
+```
 
 ## Introduction to Gemfury
-* [Gemfury homepage](https://gemfury.com/)
-* [Getting started with Gemfury](https://gemfury.com/help/getting-started)
+
+- [Gemfury homepage](https://gemfury.com/)
+- [Getting started with Gemfury](https://gemfury.com/help/getting-started)
 
 ## Using Gemfury CLI
-* [CLI documentation](https://gemfury.com/guide/cli/)
-* [Uploading private packages](https://gemfury.com/guide/cli/basic-usage/)
-* [Manage collaborators](https://gemfury.com/guide/cli/collaboration/)
 
-## Contribution and Improvements
+- [CLI documentation](https://gemfury.com/guide/cli/)
+- [Uploading private packages](https://gemfury.com/guide/cli/basic-usage/)
+- [Manage collaborators](https://gemfury.com/guide/cli/collaboration/)
 
-Please [email us](mailto:support@gemfury.com) if we've missed some key functionality or you have problems installing the CLI client.  Better yet, fork the code, make the changes, and submit a pull request to speed things along.
+For staging or local development, set `FURY_API_URL` to override the API
+endpoint and `FURY_PUSH_URL` to override the upload endpoint. Each accepts a
+hostname or a URL. If the URL includes a path, the CLI uses it as a prefix for
+requests to that endpoint.
 
 ### Submitting updates
 
@@ -90,8 +108,8 @@ Please take a look at the issues page if you want to get started.
 ### Feature requests
 
 If you think it would be nice to have a particular feature that is presently not implemented, we would love
-to hear that and consider working on it.  Just open an issue in Github.
+to hear that and consider working on it. Just open an issue in Github.
 
 ## Questions
 
-Please email support@gemfury.com or file a Github Issue if you have any other questions or problems.
+Please file a Github Issue if you have any questions or problems.
